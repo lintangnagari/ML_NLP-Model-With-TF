@@ -1,25 +1,30 @@
 # %% [markdown]
-# # **PROYEK PERTAMA : MEMBUAT MODEL NLP DENGAN TENSORFLOW 👨🏽‍💻**
+# # **FIRST PROJECT : BUILD MODEL NLP WITH TENSORFLOW 👨🏽‍💻**
 
 # %% [markdown]
 # * Name         : Lintang Nagari
 # * Email        : unggullintangg@gmail.com
 # * Linkedin     : <a href='https://www.linkedin.com/in/lintangnagari/'>Lintang Nagari</a>
-# * Id Dicoding  : <a href='https://www.dicoding.com/users/lnt_ngr/'>lnt_ngr</a>
+# * Github       : <a href='https://github.com/lnt-ngr'>lnt-ngr</a>
 
 # %% [markdown]
-# **Berikut kriteria submission yang harus Anda penuhi:**
+# **Here are the submission criteria you must meet:**
 # 
-# 
-# * Dataset yang akan dipakai bebas, namun minimal memiliki 1000 sampel.
-# * Harus menggunakan LSTM dalam arsitektur model.
-# * Harus menggunakan model sequential.
-# * Validation set sebesar 20% dari total dataset.
-# * Harus menggunakan Embedding.
-# * Harus menggunakan fungsi tokenizer.
-# * Akurasi dari model minimal 75% pada train set dan validation set.
+# * Use any dataset, but it must have at least 1000 samples.
+# * Must use LSTM in the model architecture.
+# * Must use a `sequential model`.
+# * Validation set **should be 20%** of the total dataset.
+# * Must use Embedding.
+# * Must use a tokenizer function.
+# * Model accuracy should be **at least 75%** on both the train set and validation set.
 # 
 # **Dataset : https://www.kaggle.com/datasets/crxxom/daily-google-news/download?datasetVersionNumber=4**
+# 
+# **About Dataset**
+# 
+# This dataset contains metadata of millions of news articles from Google News, including `title, publisher, DateTime, link, and category`.
+# 
+# This is also an automation project in which data is scraped every day at 4am UTC on 8 major categories. This dataset is expected to have a monthly update, thus the data collected daily will be merged into a single monthly csv file and published on Kaggle at the end of each month. One may expect the value of the dataset to continuously grow through time.
 
 # %% [markdown]
 # ### __IMPORT LIBRARY__
@@ -52,10 +57,10 @@ import nltk
 print(tf.__version__)
 
 # %% [markdown]
-# ### __EKSTRAK FILE & MENGGABUNGKAN FILE__
+# ### __EXTRACT FILE & MERGE FILE__
 
 # %%
-#Data Berita
+# News Data
 berita1 = pd.read_csv('./Berita/2023_9.csv')
 berita2 = pd.read_csv('./Berita/2023_10.csv')
 berita3 = pd.read_csv('./Berita/2023_11.csv')
@@ -64,7 +69,7 @@ berita4 = pd.read_csv('./Berita/2023_12.csv')
 Berita= [berita1, berita2, berita3, berita4]
 
 # %%
-#Menggabungkan Berita
+# Merge Data
 df = pd.concat(Berita, axis=0, ignore_index=True)
 df.head()
 
@@ -77,7 +82,7 @@ df = df.dropna()
 df.info()
 
 # %%
-#Menghilangkan data yang tidak dibutuhkan
+# To remove unnecessary data
 
 df = df.drop(columns=[
     'Publisher', 'DateTime', 'Link'
@@ -85,12 +90,12 @@ df = df.drop(columns=[
 df['Category'].value_counts()
 
 # %%
-#menghapus special character di kolom Title
+#To remove special characters from the "Title" column
 df['Title'] = df['Title'].map(lambda x: re.sub(r'\W+', ' ', x))
 df.head()
 
 # %% [markdown]
-# ## __VISUALISASI DATA__
+# ## __DATA VISUALIZATION__
 
 # %%
 plt.style.use('fivethirtyeight')
@@ -108,7 +113,7 @@ df = df.drop(columns='Category', axis=1)
 df.head()
 
 # %% [markdown]
-# ## __DATA FRAME KE NUMPY__
+# ## __Converting a DataFrame to NumPy array__
 
 # %%
 Title = df['Title'].values
@@ -117,13 +122,13 @@ Category = df[['Sports', 'Headlines', 'Entertainment',
                'Health', 'Science']].values
 
 # %% [markdown]
-# ## __SPLIT DATA TRAINING & TESTING__
+# ## __SPLIT DATA INTO TRAINING & TESTING__
 
 # %%
 Title_train, Title_test, Category_train, Category_test = train_test_split(Title, Category, test_size = 0.2, random_state=123, shuffle=True)  
 
 # %% [markdown]
-# ## __FUNGSI TOKENIZER__
+# ## __TOKENIZER FUNCTION__
 
 # %%
 vocab_size = 50000
@@ -152,7 +157,7 @@ class myCallback(tf.keras.callbacks.Callback):
 callbacks = myCallback()
 
 # %% [markdown]
-# ## __FUNGSI COMPILE, OPTEMIZER & LOSS FUNCTION__
+# ## __COMPILE FUNCTION, OPTEMIZER & LOSS FUNCTION__
 
 # %%
 model = tf.keras.Sequential([
@@ -176,7 +181,7 @@ model.compile(
 model.summary()
 
 # %% [markdown]
-# ## __FUNGSI FIT__
+# ## __FIT FUNCTION__
 
 # %%
 num_epochs =10
