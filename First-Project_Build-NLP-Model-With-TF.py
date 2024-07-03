@@ -1,5 +1,5 @@
 # %% [markdown]
-# # **FIRST PROJECT : BUILD MODEL NLP WITH TENSORFLOW 👨🏽‍💻**
+# # **FIRST PROJECT : BUILD NLP MODEL WITH TENSORFLOW 👨🏽‍💻**
 
 # %% [markdown]
 # * Name         : Lintang Nagari
